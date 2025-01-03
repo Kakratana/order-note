@@ -103,13 +103,14 @@
 
     .invoice h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .invoice-header, .invoice-footer {
       display: flex;
       justify-content: space-between;
       margin-bottom: 20px;
+      line-height: 1.6;
     }
 
     .invoice-header div, .invoice-footer div {
@@ -193,7 +194,7 @@
     <div id="items-container">
       <div class="item-row">
         <span>1</span>
-        <input type="text" placeholder="Item Description">
+        <input type="text" id="goods" placeholder="Item Description">
         <input type="number" placeholder="Qty" min="1">
         <input type="number" placeholder="Price" step="0.01" min="0">
         <!-- <span>Total</span> -->
@@ -209,16 +210,15 @@
         <option value="KHR">៛ (KHR)</option>
       </select>
     </div>
-    <button id="generate-invoice"><i class="fas fa-cog"></i>
-      Generate Invoice</button>
-    <button onclick="window.location.reload();">
-      <i class="fas fa-sync-alt"></i> Reset
-    </button>
+    <button id="generate-invoice"><i class="fas fa-cog"></i> Generate</button>
+    <button type="button" id="saveButton"><i class="fas fa-save"></i> Save Item</button>      
+    <button onclick="window.location.reload();"><i class="fas fa-sync-alt"></i> Reset</button>
   </div>
 
   <div class="invoice-container hidden" id="invoice-container">
     <div class="invoice" id="invoice">
       <h2>Invoice</h2>
+      
       <div class="invoice-header">
         <div>
           <p><strong>Customer Name:</strong> <span id="invoice-customer-name"></span></p>
@@ -250,7 +250,7 @@
           </tr>
         </tfoot>
       </table><br>
-      <div class="footer-text">Tel: 097 82 83 999, 097 74 24 999, 097 2 567 999 </div>
+      <div class="footer-text"><div class="date-time" id="dateTime"></div></div>
     </div>
     <button id="share-invoice"><i class="fas fa-share"></i>
       Share Invoice</button>
@@ -277,7 +277,7 @@
         itemRow.classList.add("item-row");
         itemRow.innerHTML = `
           <span>${itemCounter}</span>
-          <input type="text" placeholder="Item Description">
+          <input id="goods" type="text" placeholder="Item Description">
           <input type="number" placeholder="Qty" min="1">
           <input type="number" placeholder="Price" step="0.01" min="0">
           <button style="padding: 5px; margin: 0px; background-color: #ff0000;" class="delete-item"><i class="fas fa-trash"></i></button>
@@ -316,7 +316,7 @@
           if (currency === "USD") {
             return `$ ${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
           }
-          return `៛ ${value.toLocaleString("en-KH")}`;
+          return `${value.toLocaleString("en-KH")} ៛`;
         };
 
         // Populate invoice details
@@ -387,6 +387,72 @@
       });
     });
   </script>
+
+  <!-- JavaScript to Add Current Date and Time -->
+  <script>
+    // Function to format and display the current date and time
+    function displayDateTime() {
+      const dateTimeElement = document.getElementById('dateTime');
+      const now = new Date();
+
+      // Format date as dd/mmm/yyyy
+      const day = String(now.getDate()).padStart(2, '0');
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; 
+
+      const month = monthNames[now.getMonth()];
+      const year = now.getFullYear();
+
+      // Format time as hh:mm:ss AM/PM
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12; // Convert to 12-hour format
+
+      const formattedDate = `This invoice was generated on: ${month} ${day}, ${year}`;
+      const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+      const formattedDateTime = `${formattedDate}`; //`${formattedDate}, at ${formattedTime}`
+
+      dateTimeElement.textContent = formattedDateTime;
+    }
+
+    // Call the function when the page loads
+    window.onload = displayDateTime;
+  </script>
+
+<script>
+  // Function to save input values to localStorage
+  function saveToCache() {
+      const goods = document.getElementById('goods').value;
+      // const email = document.getElementById('email').value;
+      // const age = document.getElementById('age').value;
+
+      localStorage.setItem('goods', goods);
+      // localStorage.setItem('email', email);
+      // localStorage.setItem('age', age);
+
+      alert('Item saved!');
+  }
+
+  // // Function to load cached values into the inputs
+  // function loadFromCache() {
+  //     const name = localStorage.getItem('name');
+  //     // const email = localStorage.getItem('email');
+  //     // const age = localStorage.getItem('age');
+
+  //     if (name) document.getElementById('name').value = name;
+  //     // if (email) document.getElementById('email').value = email;
+  //     // if (age) document.getElementById('age').value = age;
+  // }
+
+  // Attach event listener to the Save button
+  document.getElementById('saveButton').addEventListener('click', saveToCache);
+
+ 
+</script>
+<script>// Load cached data on page load
+window.addEventListener('load', loadFromCache);
+</script>
 
 
 </body></html>
