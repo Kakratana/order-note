@@ -2,6 +2,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invoice Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
       box-sizing: border-box;
@@ -177,12 +178,12 @@
     <h3>Invoice Items</h3>
     <div id="items-container">
       <div class="item-row">
-        <!-- <span>1</span> -->
+        <span>1</span>
         <input type="text" placeholder="Item Description">
         <input type="number" placeholder="Qty" min="1">
         <input type="number" placeholder="Price" step="0.01" min="0">
         <span>Total</span>
-        <button class="delete-item">Delete</button>
+        <button class="delete-item"><i class="fas fa-trash"></i></button>
       </div>
     </div>
     <button id="add-item">Add Item</button>
@@ -253,12 +254,12 @@
         const itemRow = document.createElement("div");
         itemRow.classList.add("item-row");
         itemRow.innerHTML = `
-          // <span>${itemCounter}</span>
+          <span>${itemCounter}</span>
           <input type="text" placeholder="Item Description">
           <input type="number" placeholder="Qty" min="1">
           <input type="number" placeholder="Price" step="0.01" min="0">
           <span>Total</span>
-          <button class="delete-item">Delete</button>
+          <button class="delete-item"><i class="fas fa-trash"></i></button>
         `;
         itemsContainer.appendChild(itemRow);
 
