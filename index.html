@@ -234,7 +234,7 @@
       <table>
         <thead>
           <tr>
-            <th>№</th>
+            <th style = "text-align: center;"  >№</th>
             <th>Item</th>
             <th>Qty</th>
             <th>Price</th>
@@ -332,7 +332,7 @@
         invoiceItems.forEach(({ no, item, qty, price, total }) => {
           const row = document.createElement("tr");
           row.innerHTML = `
-            <td>${no}</td>
+            <td style = "text-align: center;">${no}</td>
             <td>${item}</td>
             <td>${qty}</td>
             <td>${formatCurrency(price)}</td>
@@ -409,7 +409,7 @@
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12 || 12; // Convert to 12-hour format
 
-      const formattedDate = `This invoice was generated on: ${month} ${day}, ${year}`;
+      const formattedDate = `This invoice was generated on ${month} ${day}, ${year}`;
       const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
       const formattedDateTime = `${formattedDate}`; //`${formattedDate}, at ${formattedTime}`
 
