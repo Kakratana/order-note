@@ -14,11 +14,18 @@
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
       padding: 10px;
+      background: repeating-linear-gradient(
+        45deg,          /* Angle of the stripes */
+        #ffffff,        /* Light gray */
+        #ffffff 2px,   /* Width of the light gray stripe */
+        #f9f9f9 2px,   /* Dark gray starts immediately after */
+        #f9f9f9 4px    /* Width of the dark gray stripe */
+      );
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .form-container, .invoice-container {
@@ -147,35 +154,37 @@
   </style>
 </head>
 <body>
-  <h1>Invoice Generator</h1>
+  <h1><i class="fas fa-file-invoice-dollar"></i>
+    Invoice Generator</h1>
   <div class="form-container" id="form-container">
     <div class="form-grid">
       <div>
-        <label for="customer-name">Customer Name</label>
-        <input type="text" id="customer-name" placeholder="Enter customer name">
+        <label for="customer-name">Customer Information:</label>
+        <input type="text" id="customer-name" placeholder="Enter customer name" required>
       </div>
       <div>
-        <label for="customer-address">Customer Address</label>
+        <!-- <label for="customer-address">Customer Address</label> -->
         <input type="text" id="customer-address" placeholder="Enter customer address">
       </div>
       <div>
-        <label for="customer-phone">Customer Phone</label>
+        <!-- <label for="customer-phone">Customer Phone</label> -->
         <input type="text" id="customer-phone" placeholder="Enter customer phone">
       </div>
       <div>
-        <label for="seller-name">Seller Name</label>
+        <label for="seller-name">Seller & Note:</label>
         <input type="text" id="seller-name" placeholder="Enter seller name">
       </div>
       <div>
-        <label for="delivery-method">Delivery Method</label>
+        <!-- <label for="delivery-method">Note</label> -->
         <input type="text" id="delivery-method" placeholder="Enter delivery method">
       </div>
-      <div>
+      <!-- <div>
         <label for="note">Note</label>
         <textarea id="note" placeholder="Enter note"></textarea>
-      </div>
+      </div> -->
     </div>
-    <h3>Invoice Items</h3>
+    <br/>
+    <h3 style="margin-bottom: 10px;">Invoice Items</h3>
     <div id="items-container">
       <div class="item-row">
         <span>1</span>
@@ -186,7 +195,8 @@
         <button style="padding: 5px; margin: 0px; background-color: #ff0000;" class="delete-item"><i class="fas fa-trash"></i></button>
       </div>
     </div>
-    <button id="add-item">Add Item</button>
+    <button id="add-item"><i class="fas fa-plus"></i>
+      Add Item</button>
     <div>
       <label for="currency">Currency</label>
       <select id="currency">
@@ -194,7 +204,8 @@
         <option value="KHR">៛ (KHR)</option>
       </select>
     </div>
-    <button id="generate-invoice">Generate Invoice</button>
+    <button id="generate-invoice"><i class="fas fa-cog"></i>
+      Generate Invoice</button>
     <button onclick="window.location.reload();">
       <i class="fas fa-sync-alt"></i> Reset
     </button>
@@ -210,15 +221,15 @@
           <p><strong>Phone:</strong> <span id="invoice-customer-phone"></span></p>
         </div>
         <div>
-          <p><strong>Seller Name:</strong> <span id="invoice-seller-name"></span></p>
-          <p><strong>Delivery Method:</strong> <span id="invoice-delivery-method"></span></p>
-          <p><strong>Note:</strong> <span id="invoice-note"></span></p>
+          <p><strong>Seller:</strong> <span id="invoice-seller-name"></span></p>
+          <p><strong>Note:</strong> <span id="invoice-delivery-method"></span></p>
+          <!-- <p><strong>Note:</strong> <span id="invoice-note"></span></p> -->
         </div>
       </div>
       <table>
         <thead>
           <tr>
-            <th>No</th>
+            <th>№</th>
             <th>Item</th>
             <th>Qty</th>
             <th>Price</th>
@@ -234,11 +245,14 @@
           </tr>
         </tfoot>
       </table><br>
-      <div class="footer-text">The money that spent was not return</div>
+      <div class="footer-text">Tel: 097 82 83 999, 097 74 24 999, 097 2 567 999 </div>
     </div>
-    <button id="share-invoice">Share Invoice</button>
-    <button id="download-invoice">Download Invoice</button>
-    <button id="regenerate-invoice">Edit</button>
+    <button id="share-invoice"><i class="fas fa-share"></i>
+      Share Invoice</button>
+    <button id="download-invoice"><i class="fas fa-download"></i>
+      Download Invoice</button>
+    <button id="regenerate-invoice"><i class="fas fa-edit"></i>
+      Edit</button>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -278,7 +292,7 @@
         const customerPhone = document.getElementById("customer-phone").value;
         const sellerName = document.getElementById("seller-name").value;
         const deliveryMethod = document.getElementById("delivery-method").value;
-        const note = document.getElementById("note").value;
+        // const note = document.getElementById("note").value;
         const currency = document.getElementById("currency").value;
 
         const invoiceItems = [];
@@ -306,7 +320,7 @@
         document.getElementById("invoice-customer-phone").textContent = customerPhone;
         document.getElementById("invoice-seller-name").textContent = sellerName;
         document.getElementById("invoice-delivery-method").textContent = deliveryMethod;
-        document.getElementById("invoice-note").textContent = note;
+        // document.getElementById("invoice-note").textContent = note;
 
         const invoiceItemsContainer = document.getElementById("invoice-items");
         invoiceItemsContainer.innerHTML = "";
