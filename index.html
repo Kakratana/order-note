@@ -13,7 +13,7 @@
     body {
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
-      padding: 20px;
+      padding: 10px;
     }
 
     h1 {
@@ -25,7 +25,7 @@
       max-width: 800px;
       margin: 0 auto;
       background: #fff;
-      padding: 20px;
+      padding: 10px;
       border-radius: 10px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
@@ -33,7 +33,7 @@
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      gap: 10px;
     }
 
     label {
@@ -57,14 +57,14 @@
 
     button {
       display: inline-block;
-      padding: 10px 20px;
+      padding: 10px 10px;
       background-color: #007bff;
       color: #fff;
       border: none;
       border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
-      margin-top: 10px;
+      margin: 10px 2px 10px 0px;
     }
 
     button:hover {
@@ -73,8 +73,8 @@
 
     .item-row {
       display: grid;
-      grid-template-columns: 40px 2fr 1fr 1fr 1fr auto;
-      gap: 10px;
+      grid-template-columns: 20px 3fr 1fr 2fr auto;
+      gap: 2px;
       margin-bottom: 10px;
       align-items: center;
     }
@@ -182,8 +182,8 @@
         <input type="text" placeholder="Item Description">
         <input type="number" placeholder="Qty" min="1">
         <input type="number" placeholder="Price" step="0.01" min="0">
-        <span>Total</span>
-        <button class="delete-item"><i class="fas fa-trash"></i></button>
+        <!-- <span>Total</span> -->
+        <button style="padding: 5px; margin: 0px; background-color: #ff0000;" class="delete-item"><i class="fas fa-trash"></i></button>
       </div>
     </div>
     <button id="add-item">Add Item</button>
@@ -195,6 +195,9 @@
       </select>
     </div>
     <button id="generate-invoice">Generate Invoice</button>
+    <button onclick="window.location.reload();">
+      <i class="fas fa-sync-alt"></i> Reset
+    </button>
   </div>
 
   <div class="invoice-container hidden" id="invoice-container">
@@ -235,7 +238,7 @@
     </div>
     <button id="share-invoice">Share Invoice</button>
     <button id="download-invoice">Download Invoice</button>
-    <button id="regenerate-invoice">Regenerate</button>
+    <button id="regenerate-invoice">Edit</button>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -258,8 +261,7 @@
           <input type="text" placeholder="Item Description">
           <input type="number" placeholder="Qty" min="1">
           <input type="number" placeholder="Price" step="0.01" min="0">
-          <span>Total</span>
-          <button class="delete-item"><i class="fas fa-trash"></i></button>
+          <button style="padding: 5px; margin: 0px; background-color: #ff0000;" class="delete-item"><i class="fas fa-trash"></i></button>
         `;
         itemsContainer.appendChild(itemRow);
 
