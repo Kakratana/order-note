@@ -1,0 +1,370 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Generator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-container, .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .item-row {
+      display: grid;
+      grid-template-columns: 40px 2fr 1fr 1fr 1fr auto;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .item-row input {
+      padding: 5px;
+    }
+
+    .invoice {
+      font-family: Arial, sans-serif;
+      width: 148mm;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      color: #000;
+      position: relative;
+    }
+
+    .invoice h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .invoice-header, .invoice-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .invoice-header div, .invoice-footer div {
+      width: 45%;
+    }
+
+    .invoice table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .invoice table th, .invoice table td {
+      border: 1px solid #000;
+      padding: 5px;
+      text-align: left;
+    }
+
+    .invoice table th {
+      background: #f1f1f1;
+    }
+
+    .footer-text {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Invoice Generator</h1>
+  <div class="form-container" id="form-container">
+    <div class="form-grid">
+      <div>
+        <label for="customer-name">Customer Name</label>
+        <input type="text" id="customer-name" placeholder="Enter customer name">
+      </div>
+      <div>
+        <label for="customer-address">Customer Address</label>
+        <input type="text" id="customer-address" placeholder="Enter customer address">
+      </div>
+      <div>
+        <label for="customer-phone">Customer Phone</label>
+        <input type="text" id="customer-phone" placeholder="Enter customer phone">
+      </div>
+      <div>
+        <label for="seller-name">Seller Name</label>
+        <input type="text" id="seller-name" placeholder="Enter seller name">
+      </div>
+      <div>
+        <label for="delivery-method">Delivery Method</label>
+        <input type="text" id="delivery-method" placeholder="Enter delivery method">
+      </div>
+      <div>
+        <label for="note">Note</label>
+        <textarea id="note" placeholder="Enter note"></textarea>
+      </div>
+    </div>
+    <h3>Invoice Items</h3>
+    <div id="items-container">
+      <div class="item-row">
+        <!-- <span>1</span> -->
+        <input type="text" placeholder="Item Description">
+        <input type="number" placeholder="Qty" min="1">
+        <input type="number" placeholder="Price" step="0.01" min="0">
+        <span>Total</span>
+        <button class="delete-item">Delete</button>
+      </div>
+    </div>
+    <button id="add-item">Add Item</button>
+    <div>
+      <label for="currency">Currency</label>
+      <select id="currency">
+        <option value="USD">$ (USD)</option>
+        <option value="KHR">៛ (KHR)</option>
+      </select>
+    </div>
+    <button id="generate-invoice">Generate Invoice</button>
+  </div>
+
+  <div class="invoice-container hidden" id="invoice-container">
+    <div class="invoice" id="invoice">
+      <h2>Invoice</h2>
+      <div class="invoice-header">
+        <div>
+          <p><strong>Customer Name:</strong> <span id="invoice-customer-name"></span></p>
+          <p><strong>Address:</strong> <span id="invoice-customer-address"></span></p>
+          <p><strong>Phone:</strong> <span id="invoice-customer-phone"></span></p>
+        </div>
+        <div>
+          <p><strong>Seller Name:</strong> <span id="invoice-seller-name"></span></p>
+          <p><strong>Delivery Method:</strong> <span id="invoice-delivery-method"></span></p>
+          <p><strong>Note:</strong> <span id="invoice-note"></span></p>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-items">
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="4">Total Amount</th>
+            <th id="total-amount"></th>
+          </tr>
+        </tfoot>
+      </table><br>
+      <div class="footer-text">The money that spent was not return</div>
+    </div>
+    <button id="share-invoice">Share Invoice</button>
+    <button id="download-invoice">Download Invoice</button>
+    <button id="regenerate-invoice">Regenerate</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      let itemCounter = 1;
+      const itemsContainer = document.getElementById("items-container");
+      const generateInvoiceButton = document.getElementById("generate-invoice");
+      const formContainer = document.getElementById("form-container");
+      const invoiceContainer = document.getElementById("invoice-container");
+      const invoiceElement = document.getElementById("invoice");
+
+      // Add new item row
+      document.getElementById("add-item").addEventListener("click", () => {
+        itemCounter++;
+        const itemRow = document.createElement("div");
+        itemRow.classList.add("item-row");
+        itemRow.innerHTML = `
+          // <span>${itemCounter}</span>
+          <input type="text" placeholder="Item Description">
+          <input type="number" placeholder="Qty" min="1">
+          <input type="number" placeholder="Price" step="0.01" min="0">
+          <span>Total</span>
+          <button class="delete-item">Delete</button>
+        `;
+        itemsContainer.appendChild(itemRow);
+
+        // Add delete functionality
+        itemRow.querySelector(".delete-item").addEventListener("click", () => {
+          itemRow.remove();
+        });
+      });
+
+      // Generate invoice
+      generateInvoiceButton.addEventListener("click", () => {
+        const customerName = document.getElementById("customer-name").value;
+        const customerAddress = document.getElementById("customer-address").value;
+        const customerPhone = document.getElementById("customer-phone").value;
+        const sellerName = document.getElementById("seller-name").value;
+        const deliveryMethod = document.getElementById("delivery-method").value;
+        const note = document.getElementById("note").value;
+        const currency = document.getElementById("currency").value;
+
+        const invoiceItems = [];
+        let totalAmount = 0;
+        itemsContainer.querySelectorAll(".item-row").forEach((row, index) => {
+          const item = row.querySelector("input[placeholder='Item Description']").value;
+          const qty = parseInt(row.querySelector("input[placeholder='Qty']").value) || 0;
+          const price = parseFloat(row.querySelector("input[placeholder='Price']").value) || 0;
+          const total = qty * price;
+          totalAmount += total;
+          invoiceItems.push({ no: index + 1, item, qty, price, total });
+        });
+
+        // Format currency
+        const formatCurrency = (value) => {
+          if (currency === "USD") {
+            return `$ ${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          }
+          return `៛ ${value.toLocaleString("en-KH")}`;
+        };
+
+        // Populate invoice details
+        document.getElementById("invoice-customer-name").textContent = customerName;
+        document.getElementById("invoice-customer-address").textContent = customerAddress;
+        document.getElementById("invoice-customer-phone").textContent = customerPhone;
+        document.getElementById("invoice-seller-name").textContent = sellerName;
+        document.getElementById("invoice-delivery-method").textContent = deliveryMethod;
+        document.getElementById("invoice-note").textContent = note;
+
+        const invoiceItemsContainer = document.getElementById("invoice-items");
+        invoiceItemsContainer.innerHTML = "";
+        invoiceItems.forEach(({ no, item, qty, price, total }) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${no}</td>
+            <td>${item}</td>
+            <td>${qty}</td>
+            <td>${formatCurrency(price)}</td>
+            <td>${formatCurrency(total)}</td>
+          `;
+          invoiceItemsContainer.appendChild(row);
+        });
+
+        document.getElementById("total-amount").textContent = formatCurrency(totalAmount);
+
+        // Hide form and show invoice
+        formContainer.classList.add("hidden");
+        invoiceContainer.classList.remove("hidden");
+      });
+
+      // Regenerate invoice
+      document.getElementById("regenerate-invoice").addEventListener("click", () => {
+        formContainer.classList.remove("hidden");
+        invoiceContainer.classList.add("hidden");
+      });
+
+      // Download invoice as an image
+      document.getElementById("download-invoice").addEventListener("click", () => {
+        html2canvas(invoiceElement).then((canvas) => {
+          const link = document.createElement("a");
+          link.download = "invoice.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        });
+      });
+
+      // Share invoice using Web Share API
+      document.getElementById("share-invoice").addEventListener("click", async () => {
+        if (navigator.share) {
+          html2canvas(invoiceElement).then(async (canvas) => {
+            canvas.toBlob(async (blob) => {
+              const file = new File([blob], "invoice.png", { type: "image/png" });
+              try {
+                await navigator.share({
+                  files: [file],
+                  title: "Invoice",
+                  text: "Here is your invoice!",
+                });
+              } catch (error) {
+                console.error("Error sharing invoice:", error);
+              }
+            });
+          });
+        } else {
+          alert("Web Share API not supported on your browser.");
+        }
+      });
+    });
+  </script>
+
+
+</body></html>
