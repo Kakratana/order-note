@@ -126,7 +126,7 @@
     .invoice table th, .invoice table td {
       border: 1px solid #000;
       padding: 5px;
-      text-align: left;
+      text-align: center ;
     }
 
     .invoice table th {
@@ -234,7 +234,7 @@
       <table>
         <thead>
           <tr>
-            <th style = "text-align: center;"  >№</th>
+            <th >№</th>
             <th>Item</th>
             <th>Qty</th>
             <th>Price</th>
@@ -334,7 +334,7 @@
           row.innerHTML = `
             <td style = "text-align: center;">${no}</td>
             <td>${item}</td>
-            <td>${qty}</td>
+            <td style = "text-align: center;">${qty}</td>
             <td>${formatCurrency(price)}</td>
             <td>${formatCurrency(total)}</td>
           `;
