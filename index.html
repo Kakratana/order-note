@@ -84,13 +84,13 @@
     .item-row {
       display: grid;
       grid-template-columns: 20px 3fr 1fr 2fr auto;
-      gap: 2px;
+      gap: 4px;
       margin-bottom: 10px;
       align-items: center;
     }
 
     .item-row input {
-      padding: 5px;
+      padding: 10px;
     }
 
     .invoice {
@@ -126,10 +126,16 @@
       margin-top: 20px;
     }
 
-    .invoice table th, .invoice table td {
+    .invoice table th{
       border: 1px solid #000;
       padding: 5px;
-      text-align: left;
+      text-align: center ;
+    }
+    
+    .invoice table td {
+      border: 1px solid #000;
+      padding: 5px;
+      text-align: right ;
     }
 
     .invoice table th {
@@ -201,16 +207,16 @@
         <input type="number" placeholder="Qty" min="1">
         <input type="number" placeholder="Price" step="0.01" min="0">
         <!-- <span>Total</span> -->
-        <button style="padding: 5px; margin: 0px; background-color: #ff0000;" class="delete-item"><i class="fas fa-trash"></i></button>
+        <button style="padding: 10px; margin: 0px; background-color: #ff0000;" class="delete-item"><i class="fas fa-trash"></i></button>
       </div>
     </div>
     <button id="add-item"><i class="fas fa-plus"></i>
       Add Item</button>
     <div>
       <label for="currency">Currency</label>
-      <select id="currency">
-        <option value="USD">$ (USD)</option>
+      <select style ="padding:10px" id="currency">
         <option value="KHR">៛ (KHR)</option>
+        <option value="USD">$ (USD)</option>
       </select>
     </div>
     <button id="generate-invoice"><i class="fas fa-cog"></i> Generate</button>
@@ -237,7 +243,7 @@
       <table>
         <thead>
           <tr>
-            <th>№</th>
+            <th >№</th>
             <th>Item</th>
             <th>Qty</th>
             <th>Price</th>
@@ -248,17 +254,17 @@
         </tbody>
         <tfoot>
           <tr>
-            <th colspan="4">Total Amount</th>
-            <th id="total-amount"></th>
+            <th style ="text-align:left" colspan="4">Total Amount</th>
+            <th style ="text-align:right" id="total-amount"></th>
           </tr>
         </tfoot>
       </table><br>
       <div class="footer-text"><div class="date-time" id="dateTime"></div></div>
     </div>
     <button id="share-invoice"><i class="fas fa-share"></i>
-      Share Invoice</button>
+      Share</button>
     <button id="download-invoice"><i class="fas fa-download"></i>
-      Download Invoice</button>
+      Download</button>
     <button id="regenerate-invoice"><i class="fas fa-edit"></i>
       Edit</button>
   </div>
@@ -283,7 +289,7 @@
           <input id="goods" type="text" placeholder="Item Description">
           <input type="number" placeholder="Qty" min="1">
           <input type="number" placeholder="Price" step="0.01" min="0">
-          <button style="padding: 5px; margin: 0px; background-color: #ff0000;" class="delete-item"><i class="fas fa-trash"></i></button>
+          <button style="padding: 10px; margin: 0px; background-color: #ff0000;" class="delete-item"><i class="fas fa-trash"></i></button>
         `;
         itemsContainer.appendChild(itemRow);
 
@@ -335,9 +341,9 @@
         invoiceItems.forEach(({ no, item, qty, price, total }) => {
           const row = document.createElement("tr");
           row.innerHTML = `
-            <td>${no}</td>
-            <td>${item}</td>
-            <td>${qty}</td>
+            <td style = "text-align: center;">${no}</td>
+            <td style = "text-align: left; ">${item}</td>
+            <td style = "text-align: center;">${qty}</td>
             <td>${formatCurrency(price)}</td>
             <td>${formatCurrency(total)}</td>
           `;
@@ -412,7 +418,7 @@
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12 || 12; // Convert to 12-hour format
 
-      const formattedDate = `This invoice was generated on: ${month} ${day}, ${year}`;
+      const formattedDate = `This invoice was generated on ${month} ${day}, ${year}`;
       const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
       const formattedDateTime = `${formattedDate}`; //`${formattedDate}, at ${formattedTime}`
 
