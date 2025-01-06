@@ -94,7 +94,7 @@
 
     .item-row {
       display: grid;
-      grid-template-columns: 20px 3fr 1fr 2fr auto;
+      grid-template-columns: 20px 3fr 1.5fr 1.4fr 2fr auto;
       gap: 4px;
       margin-bottom: 10px;
       align-items: center;
@@ -214,7 +214,8 @@
     <div id="items-container">
       <div class="item-row">
         <span>1</span>
-        <input type="text" id="goods" placeholder="Item Description">
+        <input type="text" id="goods" placeholder="Item Desc.">
+        <input type="text" id="unit" placeholder="Unit">
         <input type="number" placeholder="Qty" min="1">
         <input type="number" placeholder="Price" step="0.01" min="0">
         <!-- <span>Total</span> -->
@@ -241,7 +242,7 @@
       
       <div class="invoice-header">
         <div>
-          <p><strong>Customer Name:</strong> <span id="invoice-customer-name"></span></p>
+          <p><strong>Customer:</strong> <span id="invoice-customer-name"></span></p>
           <p><strong>Address:</strong> <span id="invoice-customer-address"></span></p>
           <p><strong>Phone:</strong> <span id="invoice-customer-phone"></span></p>
         </div>
@@ -256,6 +257,7 @@
           <tr>
             <th >№</th>
             <th>Item</th>
+            <th>Unit</th>
             <th>Qty</th>
             <th>Price</th>
             <th>Total</th>
@@ -265,7 +267,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <th style ="text-align:left" colspan="4">Total Amount</th>
+            <th style ="text-align:left" colspan="5">Total Amount</th>
             <th style ="text-align:right" id="total-amount"></th>
           </tr>
         </tfoot>
@@ -297,7 +299,8 @@
         itemRow.classList.add("item-row");
         itemRow.innerHTML = `
           <span>${itemCounter}</span>
-          <input id="goods" type="text" placeholder="Item Description">
+          <input id="goods" type="text" placeholder="Item Desc.">
+          <input type="text" id="unit" placeholder="Unit">
           <input type="number" placeholder="Qty" min="1">
           <input type="number" placeholder="Price" step="0.01" min="0">
           <button style="padding: 10px; margin: 0px; background-color: #ff0000;" class="delete-item"><i class="fas fa-trash"></i></button>
@@ -323,12 +326,13 @@
         const invoiceItems = [];
         let totalAmount = 0;
         itemsContainer.querySelectorAll(".item-row").forEach((row, index) => {
-          const item = row.querySelector("input[placeholder='Item Description']").value;
+          const item = row.querySelector("input[placeholder='Item Desc.']").value;
+          const unit = row.querySelector("input[placeholder='Unit']").value;
           const qty = parseInt(row.querySelector("input[placeholder='Qty']").value) || 0;
           const price = parseFloat(row.querySelector("input[placeholder='Price']").value) || 0;
           const total = qty * price;
           totalAmount += total;
-          invoiceItems.push({ no: index + 1, item, qty, price, total });
+          invoiceItems.push({ no: index + 1, item, unit, qty, price, total });
         });
 
         // Format currency
@@ -349,11 +353,12 @@
 
         const invoiceItemsContainer = document.getElementById("invoice-items");
         invoiceItemsContainer.innerHTML = "";
-        invoiceItems.forEach(({ no, item, qty, price, total }) => {
+        invoiceItems.forEach(({ no, item, unit, qty, price, total }) => {
           const row = document.createElement("tr");
           row.innerHTML = `
             <td style = "text-align: center;">${no}</td>
             <td style = "text-align: left; ">${item}</td>
+            <td style = "text-align: left; ">${unit}</td>
             <td style = "text-align: center;">${qty}</td>
             <td>${formatCurrency(price)}</td>
             <td>${formatCurrency(total)}</td>
