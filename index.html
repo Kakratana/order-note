@@ -50,6 +50,9 @@
     }
 
     input, select, textarea {
+      -webkit-appearance: none; /* Remove default styling on iOS Safari */
+      -moz-appearance: none;    /* Remove default styling on Firefox */
+      appearance: none;         /* Remove default styling for modern browsers */
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -448,11 +451,8 @@
   // Attach event listener to the Save button
   document.getElementById('saveButton').addEventListener('click', saveToCache);
 
- 
+  // Load cached data on page load
+  window.addEventListener('load', loadFromCache);
 </script>
-<script>// Load cached data on page load
-window.addEventListener('load', loadFromCache);
-</script>
-
 
 </body></html>
