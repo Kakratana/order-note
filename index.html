@@ -182,7 +182,7 @@
 </head>
 <body>
   <h1><i class="fas fa-file-invoice-dollar"></i>
-    Invoice Generator</h1>
+    Document Generator</h1>
   <div class="form-container" id="form-container">
     <div class="form-grid">
       <div>
@@ -236,6 +236,15 @@
         <option value="USD">Dollar (USD)</option>
       </select>
     </div>
+    <div>
+      <label for="doc-type">Document Type</label>
+      <select style ="padding:10px" id="doc-type">
+        <option value="Invoice" selected>Invoice</option>
+        <option value="Quotation">Quotation</option>
+        <option value="Purchase Order">Purchase Order</option>
+        <option value="Expense Request">Expense Request</option>
+      </select>
+    </div>
     <button id="generate-invoice"><i class="fas fa-cog"></i> Generate</button>
     <button type="button" id="saveButton"><i class="fas fa-save"></i> Save Item</button>      
     <button onclick="window.location.reload();"><i class="fas fa-sync-alt"></i> Reset</button>
@@ -243,7 +252,7 @@
 
   <div class="invoice-container hidden" id="invoice-container">
     <div class="invoice" id="invoice">
-      <h2>Invoice</h2>
+      <h2><span id="invoice-doc-type"></span></h2>
       
       <div class="invoice-header">
         <div>
@@ -327,6 +336,7 @@
         const deliveryMethod = document.getElementById("delivery-method").value;
         const note = document.getElementById("note").value;
         const currency = document.getElementById("currency").value;
+        const doctype = document.getElementById("doc-type").value;
 
         const invoiceItems = [];
         let totalAmount = 0;
@@ -355,6 +365,7 @@
         document.getElementById("invoice-seller-name").textContent = sellerName;
         document.getElementById("invoice-delivery-method").textContent = deliveryMethod;
         document.getElementById("invoice-note").textContent = note;
+        document.getElementById("invoice-doc-type").textContent = doctype;
 
         const invoiceItemsContainer = document.getElementById("invoice-items");
         invoiceItemsContainer.innerHTML = "";
